@@ -1,14 +1,24 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/spf13/cobra"
-	"gopkg.in/toast.v1"
+	toast "gopkg.in/toast.v1"
+)
+
+// Overridden via ldflags
+var (
+	version   = "99.0.1-devbuild"
+	commit    = "unknown"
+	date      = "unknown"
+	goversion = "unknown"
 )
 
 func main() {
 	var showHelp bool
+	var showVersion bool
 	var icon string
 	var category string
 	var appID string
@@ -17,9 +27,12 @@ func main() {
 		Use:   "wslnotify-send",
 		Short: "wsl-notify-send - a WSL integration for notify-send",
 		Long:  "wsl-notify-send provides a Windows.exe that accepts parameters similar to the Linux notify-send utility to aid interop. For more customisability, see the toast CLI at https://github.com/go-toast/toast",
-		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			if showHelp {
+			if showVersion {
+				fmt.Printf("wl-notify-send version %s\nBuilt %s (commit %s)\n%s\n\n", version, date, commit, goversion)
+				return
+			}
+			if showHelp || len(args) != 1 { // expect single arg with message
 				_ = cmd.Usage()
 				return
 			}
@@ -45,6 +58,7 @@ func main() {
 	rootCmd.Flags().StringArrayP("urgency", "u", []string{}, "Ignored in wsl-notify-send")
 	// Custom flags
 	rootCmd.Flags().StringVar(&appID, "appId", "wsl-notify-send", "[non-standard] Specifies the app ID")
+	rootCmd.Flags().BoolVar(&showVersion, "version", false, "Show version information")
 	_ = rootCmd.Execute()
 }
 
