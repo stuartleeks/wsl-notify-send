@@ -24,12 +24,12 @@ func main() {
 	var appID string
 
 	rootCmd := &cobra.Command{
-		Use:   "wslnotify-send",
+		Use:   "wsl-notify-send",
 		Short: "wsl-notify-send - a WSL integration for notify-send",
 		Long:  "wsl-notify-send provides a Windows.exe that accepts parameters similar to the Linux notify-send utility to aid interop. For more customisability, see the toast CLI at https://github.com/go-toast/toast",
 		Run: func(cmd *cobra.Command, args []string) {
 			if showVersion {
-				fmt.Printf("wl-notify-send version %s\nBuilt %s (commit %s)\n%s\n\n", version, date, commit, goversion)
+				fmt.Printf("wsl-notify-send version %s\nBuilt %s (commit %s)\n%s\n\n", version, date, commit, goversion)
 				return
 			}
 			if showHelp || len(args) != 1 { // expect single arg with message
