@@ -1,0 +1,35 @@
+name: build-and-release
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - README.md
+      - 'docs/**'
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - README.md
+      - 'docs/**'
+
+jobs:  
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: CI Tooling
+      run: sudo apt update && sudo apt install build-essential -y
+    
+    - name: Build devcontainer for tooling
+      run: sudo -E make devcontainer
+
+    - name: Run the release
+      run: sudo -E make devcontainer-release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BUILD_NUMBER: ${{ github.run_id }}
+        IS_CI: 1
+        IS_PR: ${{ github.head_ref }}
+        BRANCH: ${{ github.ref }}

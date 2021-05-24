@@ -59,6 +59,11 @@ RUN \
     # --> GolangCI-lint
     && curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sed 's/tar -/tar --no-same-owner -/g' | sh -s -- -b $(go env GOPATH)/bin
 
+# Add goreleaser
+RUN \
+    # --> Go releaser 
+    curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | BINDIR="$GOPATH/bin" sh -s -- "v0.164.0"
+
 # __DEVCONTAINER_SNIPPET_INSERT__ (control where snippets get inserted using the devcontainer CLI)
 
 # Switch back to dialog for any ad-hoc use of apt-get
