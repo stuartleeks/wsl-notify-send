@@ -2,7 +2,7 @@
 
 `wsl-notify-send` provides a Windows executable that is intended to be a replacement for the [Linux `notify-send` utility](https://ss64.com/bash/notify-send.html).
 
-`wsl-notify-send` is implemented using [go-toast/toast](https://github.com/go-toast/toast) and if you have control over the script calling `notify-send`, you will  find that the `toast` CLI gives you more control over the notifications.
+`wsl-notify-send` is implemented using [go-toast/toast](https://github.com/go-toast/toast) and if you have control over the script calling `notify-send`, you will  find that the `toast` CLI gives you more control over the notifications. Also checkout the [stuartleeks/toast](https://github.com/stuartleeks/toast) fork which includes a change to hide the console window when the app runs.
 
 ## Installation
 
