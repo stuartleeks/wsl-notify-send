@@ -4,8 +4,8 @@ help: ## show this help
 		| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%s\033[0m|%s\n", $$1, $$2}' \
 		| column -t -s '|'
 
-build: fmt ## Build devcontainer cli
-	GOOS=windows GOARCH=amd64 go build -o wsl-notify-send.exe main.go
+build: fmt ## Build 
+	GOOS=windows GOARCH=amd64 go build -ldflags -H=windowsgui -o wsl-notify-send.exe main.go
 
 lint: build ## Build and lint
 	golangci-lint run
