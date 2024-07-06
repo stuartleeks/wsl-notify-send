@@ -2,10 +2,17 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
+	"math/rand"
+	"path/filepath"
+	"strconv"
 
 	"github.com/spf13/cobra"
 	toast "gopkg.in/toast.v1"
+
+	"net/http"
+	"os"
 )
 
 // Overridden via ldflags
@@ -36,6 +43,25 @@ func main() {
 				_ = cmd.Usage()
 				return
 			}
+
+			// only use 100 random file names to avoid too much garbage since this application closes before the windows executable completes
+			// not allowing us to delete the file after the toast is invoked
+			random := strconv.Itoa(rand.Intn(100) + 1)
+
+			if len(icon) > 0 && (icon[:7] == "http://" || icon[:8] == "https://") {
+				tmpFolder := os.TempDir()
+
+				err := DownloadFile(icon, filepath.Join(tmpFolder, "wsl-notify-send-icon-tmp"+random+".png"))
+				if err != nil {
+					log.Fatalln(err)
+					icon = ""
+				} else {
+					// had to comment this out because the toast wasn't getting invoked before the file was removed
+					// defer os.Remove("wsl-notify-send-icon-tmp"+random+".png")
+					icon = filepath.Join(tmpFolder, "wsl-notify-send-icon-tmp"+random+".png")
+				}
+			}
+
 			notification := &toast.Notification{
 				AppID:   appID,
 				Title:   category,
@@ -60,6 +86,33 @@ func main() {
 	rootCmd.Flags().StringVar(&appID, "appId", "wsl-notify-send", "[non-standard] Specifies the app ID")
 	rootCmd.Flags().BoolVar(&showVersion, "version", false, "Show version information")
 	_ = rootCmd.Execute()
+}
+
+// DownloadFile will download a url and store it in local filepath.
+// It writes to the destination file as it downloads it, without
+// loading the entire file into memory.
+func DownloadFile(url string, filepath string) error {
+	// Create the file
+	out, err := os.Create(filepath)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	// Get the data
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	// Write the body to file
+	_, err = io.Copy(out, resp.Body)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // TODO - explore mapping icons: https://wiki.ubuntu.com/NotificationDevelopmentGuidelines#How_do_I_get_these_slick_icons
