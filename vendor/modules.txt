@@ -1,5 +1,8 @@
 # github.com/deadcheat/goblet v1.3.1
 ## explicit
+# github.com/go-toast/toast v0.0.0-20190211030409-01e6764cf0a4
+## explicit
+github.com/go-toast/toast
 # github.com/inconshreveable/mousetrap v1.0.0
 github.com/inconshreveable/mousetrap
 # github.com/kyoh86/richgo v0.3.6
@@ -22,6 +25,3 @@ github.com/spf13/pflag
 ## explicit
 # golang.org/x/sys v0.0.0-20210521203332-0cec03c779c1
 ## explicit
-# gopkg.in/toast.v1 v1.0.0-20180812000517-0a84660828b2
-## explicit
-gopkg.in/toast.v1
